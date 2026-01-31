@@ -1,0 +1,27 @@
+repos:
+  - repo: local
+    hooks:
+      - id: prettier
+        name: Prettier
+        entry: npx prettier --write
+        language: system
+        types: [file]
+        files: \.(ts|tsx|js|jsx|json|md|yaml|yml|css)$
+      - id: ruff-format
+        name: Ruff Format
+        entry: ruff format
+        language: system
+        types: [file]
+        files: \.py$
+      - id: ruff-lint
+        name: Ruff Lint
+        entry: ruff check --fix
+        language: system
+        types: [file]
+        files: \.py$
+      - id: ruff-imports
+        name: Ruff Import Sorting
+        entry: ruff check --select I --fix
+        language: system
+        types: [file]
+        files: \.py$
