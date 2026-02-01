@@ -16,22 +16,15 @@ const path = require("path");
 
 const projectRoot = path.resolve(__dirname, "..");
 
-console.log("🚀 Starting Convex + Next.js for Fusion...\n");
-console.log("This will start:");
-console.log("  • Convex backend (http://127.0.0.1:3210)");
-console.log("  • Next.js frontend (http://localhost:3000)\n");
+console.log("🚀 Starting Convex + Next.js...\n");
 
 // Track if Convex is ready
 let convexReady = false;
-const convexReadyIndicators = [
-  "Convex functions ready",
-  "Started running a deployment locally",
-];
+let frontendStarted = false;
 
 /**
  * Start Convex backend first
  */
-console.log("⚙️  Starting Convex backend...");
 const convexProcess = spawn("npm", ["run", "dev:backend"], {
   cwd: projectRoot,
   stdio: ["ignore", "pipe", "pipe"],
@@ -43,30 +36,18 @@ convexProcess.stdout.on("data", (data) => {
   // Check if Convex is ready
   if (
     !convexReady &&
-    convexReadyIndicators.some((indicator) => output.includes(indicator))
+    (output.includes("Convex functions ready") ||
+      output.includes("Started running a deployment"))
   ) {
     convexReady = true;
-    console.log("✅ Convex backend is ready\n");
-    
-    // Now start the frontend
-    startFrontend();
-  }
-  
-  // Optionally log important messages
-  if (output.includes("error") || output.includes("Error")) {
-    console.log("[Convex]", output.trim());
-  }
-});
-
-convexProcess.stderr.on("data", (data) => {
-  const output = data.toString();
-  if (output.includes("error") || output.includes("Error")) {
-    console.error("[Convex Error]", output.trim());
+    if (!frontendStarted) {
+      startFrontend();
+    }
   }
 });
 
 convexProcess.on("error", (err) => {
-  console.error("❌ Failed to start Convex backend:", err.message);
+  console.error("❌ Convex error:", err.message);
   process.exit(1);
 });
 
@@ -74,7 +55,7 @@ convexProcess.on("error", (err) => {
  * Start Next.js frontend (called after Convex is ready)
  */
 function startFrontend() {
-  console.log("📱 Starting Next.js frontend...");
+  frontendStarted = true;
   
   const nextProcess = spawn("npm", ["run", "dev:frontend"], {
     cwd: projectRoot,
@@ -82,20 +63,18 @@ function startFrontend() {
   });
 
   nextProcess.on("error", (err) => {
-    console.error("❌ Failed to start Next.js frontend:", err.message);
+    console.error("❌ Next.js error:", err.message);
     convexProcess.kill();
     process.exit(1);
   });
 
   nextProcess.on("close", (code) => {
-    console.log("Next.js frontend exited with code", code);
     convexProcess.kill();
-    process.exit(code);
+    process.exit(code || 0);
   });
 
-  // Handle signals
+  // Handle shutdown
   process.on("SIGINT", () => {
-    console.log("\n\nShutting down servers...");
     nextProcess.kill();
     convexProcess.kill();
     process.exit(0);
