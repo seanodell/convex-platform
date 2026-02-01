@@ -3,7 +3,7 @@ node = "lts"
 python = "3.12"
 
 [env]
-env_file = ".env"
+env_file = ".env.local"
 _.python.venv = { path = ".venv", create = true }
 
 
