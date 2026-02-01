@@ -3,8 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "npm run dev:frontend",
-    "dev:fullstack": "npm-run-all --parallel dev:backend dev:frontend",
+    "dev": "npm-run-all --parallel dev:backend dev:frontend",
     "dev:frontend": "next dev",
     "dev:backend": "convex dev",
     "build": "next build",
