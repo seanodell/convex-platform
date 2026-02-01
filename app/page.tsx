@@ -43,13 +43,22 @@ export default function Home() {
 }
 
 function Content() {
-  const { viewer, numbers } =
-    useQuery(api.myFunctions.listNumbers, {
-      count: 10,
-    }) ?? {};
+  const queryResult = useQuery(api.myFunctions.listNumbers, {
+    count: 10,
+  });
   const addNumber = useMutation(api.myFunctions.addNumber);
 
-  if (viewer === undefined || numbers === undefined) {
+  // Show loading state only briefly, then show UI
+  const [showLoading, setShowLoading] = useState(true);
+  useEffect(() => {
+    const timeout = setTimeout(() => setShowLoading(false), 3000);
+    return () => clearTimeout(timeout);
+  }, []);
+
+  const { viewer, numbers } = queryResult ?? {};
+
+  // Show loading only if we haven't exceeded the timeout
+  if ((viewer === undefined || numbers === undefined) && showLoading && queryResult === undefined) {
     return (
       <div className="mx-auto">
         <div className="flex items-center gap-2">
