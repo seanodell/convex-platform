@@ -43,11 +43,16 @@ export default function Home() {
 }
 
 function Content() {
-  const { viewer, numbers } =
-    useQuery(api.myFunctions.listNumbers, {
-      count: 10,
-    }) ?? {};
+  const queryResult = useQuery(api.myFunctions.listNumbers, {
+    count: 10,
+  });
+  const { viewer, numbers } = queryResult ?? {};
   const addNumber = useMutation(api.myFunctions.addNumber);
+
+  useEffect(() => {
+    console.log("Query result:", queryResult);
+    console.log("Convex URL:", process.env.NEXT_PUBLIC_CONVEX_URL);
+  }, [queryResult]);
 
   if (viewer === undefined || numbers === undefined) {
     return (
