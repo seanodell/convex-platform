@@ -105,6 +105,7 @@ convex/
 ### "Backend not connected" message shows
 
 This is normal! It means:
+
 - You're in frontend-only mode (editing the UI)
 - No database backend is connected yet
 - The button and data features won't work, but you can still design the UI
