@@ -1,30 +1,5 @@
 {
   "devCommand": "npm run dev",
   "buildCommand": "npm run build",
-  "startCommand": "npm run start",
-  "setupCommand": "npm install",
-  "watchPatterns": [
-    "app/**",
-    "components/**",
-    "convex/**",
-    "public/**",
-    "package.json"
-  ],
-  "ignorePatterns": [
-    "node_modules",
-    ".next",
-    ".convex",
-    "dist",
-    "build"
-  ],
-  "detectPort": true,
-  "environmentVariables": {
-    "NODE_ENV": "development"
-  },
-  "description": "Full-stack Convex + Next.js application",
-  "metadata": {
-    "framework": "next",
-    "backend": "convex",
-    "languages": ["typescript", "react"]
-  }
+  "setupCommand": "npm install"
 }
