@@ -1,20 +1,50 @@
 # Convex + Next.js
 
-A full-stack application template combining Convex (backend) with Next.js (frontend). Designed to work seamlessly in Builder Fusion.
+A full-stack application template combining Convex (backend) with Next.js (frontend). Designed for designers and developers to collaborate in Builder Fusion.
 
-## Getting Started (In Fusion)
+## Quick Start in Fusion
 
-**You don't need to do anything special!** When you open this project in Fusion:
+**No setup needed!** Just open this project in Fusion and start editing:
 
-1. The development server starts automatically
-2. Both the backend and frontend run together
-3. Your preview shows the live application at `http://localhost:3000`
+- The preview shows your changes **instantly**
+- Edit the UI in the `app/` folder
+- The backend message shows when you're in frontend-only mode
 
-That's it. You can start editing right away.
+That's it.
 
-## Getting Started (Local Development)
+## Editing for Designers
 
-If you're developing locally on your machine:
+### I just want to edit the UI
+
+Great! You're already in the right mode. The app runs in **frontend-only mode** by default:
+
+- Edit `app/page.tsx` to change what users see
+- Edit `app/globals.css` to change colors, fonts, spacing, etc.
+- Edit files in `components/` to change reusable parts
+- Changes appear instantly in the preview
+
+The "Backend not connected" message is expected—it just means the data features aren't active yet.
+
+### I want to test with real data
+
+To add a backend and connect to real data:
+
+1. Deploy Convex to a cloud environment
+2. Get your Convex deployment URL
+3. Set `NEXT_PUBLIC_CONVEX_URL` in `.env.local` to your deployed backend
+4. Restart the project—full stack will work
+
+Or, for local development:
+
+```bash
+npm run dev:fullstack
+```
+
+Note: Full stack local development works best on your own machine, not in Fusion.
+
+## Local Development (On Your Machine)
+
+If you're developing locally:
 
 ```bash
 npm install
@@ -23,71 +53,75 @@ npm run dev
 
 Then open `http://localhost:3000` in your browser.
 
-## Making Changes
+### Frontend only:
 
-### Edit the Frontend (UI/Design)
-- Files are in the `app/` folder
-- Edit `app/page.tsx` to change what users see
-- Changes appear instantly in your preview
+```bash
+npm run dev:frontend
+```
 
-### Edit the Backend (Data/Functions)
-- Files are in the `convex/` folder
-- Edit `convex/myFunctions.ts` to add/change backend logic
-- Edit `convex/schema.ts` to change your database structure
-- Changes appear instantly
+### Full stack (frontend + local backend):
+
+```bash
+npm run dev:fullstack
+```
 
 ## File Guide
 
+### Frontend (UI/Design)
+
 ```
-app/                    ← Frontend (what users see)
-├── page.tsx           ← Main page
-├── layout.tsx         ← Page wrapper
-└── globals.css        ← Styling
+app/
+├── page.tsx          ← Main page - edit this to change the UI
+├── layout.tsx        ← Wraps all pages
+└── globals.css       ← Styling - edit this to change colors, fonts, etc.
 
-convex/                 ← Backend (data & logic)
-├── myFunctions.ts     ← Backend functions
-└── schema.ts          ← Database structure
-
-components/             ← Reusable UI components
+components/
+├── ConvexClientProvider.tsx  ← Connects to backend (don't edit this)
 ```
 
-## What's Running?
+### Backend (Data & Functions)
 
-When you start the project:
-
-- **Frontend**: Next.js at `http://localhost:3000`
-- **Backend**: Convex at `http://127.0.0.1:3210`
-- **Your View**: Shows the frontend interface
-
-Both communicate automatically. You don't need to worry about the backend URL—it's already configured.
+```
+convex/
+├── myFunctions.ts    ← Backend functions - edit to add/change logic
+├── schema.ts         ← Database structure - edit to add/change data
+└── _generated/       ← Auto-generated (don't edit)
+```
 
 ## Troubleshooting
 
-### Blank page or "Loading..." won't go away
-- Wait a few seconds for everything to start
-- Refresh the page
-- Check that you're viewing `http://localhost:3000`, not another port
+### Blank page / nothing shows
+
+- Wait a few seconds for the page to load
+- Try refreshing the preview
+- Make sure you're viewing `http://localhost:3000` (not another port)
 
 ### Changes aren't showing up
-- Make sure you saved the file
-- Wait a second or two for the preview to refresh
-- Try refreshing manually in the preview
 
-### Error about connection
-- The frontend can't reach the backend
-- This usually fixes itself—wait 10 seconds and refresh
-- If it persists, contact support
+- Did you save the file?
+- Wait a second for the preview to refresh automatically
+- Try refreshing manually
+
+### "Backend not connected" message shows
+
+This is normal! It means:
+- You're in frontend-only mode (editing the UI)
+- No database backend is connected yet
+- The button and data features won't work, but you can still design the UI
+
+To add a backend, see "I want to test with real data" above.
 
 ## Learn More
 
-- **[Convex Docs](https://docs.convex.dev)** - Backend database and functions
+- **[Convex Docs](https://docs.convex.dev)** - Database & backend functions
 - **[Next.js Docs](https://nextjs.org/docs)** - Frontend framework
-- **[Convex + Next.js Guide](https://docs.convex.dev/home)** - Integration guide
+- **[Convex + Next.js Integration](https://docs.convex.dev/home)** - Full guide
 
 ## Next Steps
 
-1. **Try it out**: Click "+ Generate random number" to add data
-2. **Edit the UI**: Change text in `app/page.tsx`
-3. **Add more features**: Modify `convex/myFunctions.ts` and `app/page.tsx`
+1. **Try editing**: Change the text in `app/page.tsx`
+2. **Change colors**: Edit `app/globals.css`
+3. **Add components**: Create new files in `components/`
+4. **Get the backend**: Follow "I want to test with real data" above
 
 Happy building! 🚀
