@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "node scripts/fusion-dev.js",
+    "dev": "npm-run-all --parallel dev:backend dev:frontend",
     "dev:frontend": "next dev",
     "dev:backend": "convex dev",
     "build": "next build",
