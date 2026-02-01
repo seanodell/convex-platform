@@ -1,100 +1,93 @@
 # Convex + Next.js
 
-A full-stack application template combining Convex (backend) with Next.js (frontend).
+A full-stack application template combining Convex (backend) with Next.js (frontend). Designed to work seamlessly in Builder Fusion.
 
-## Quick Start
+## Getting Started (In Fusion)
 
-### Prerequisites
-- Node.js 18+ 
-- npm or your preferred package manager
+**You don't need to do anything special!** When you open this project in Fusion:
 
-### Installation
+1. The development server starts automatically
+2. Both the backend and frontend run together
+3. Your preview shows the live application at `http://localhost:3000`
 
-1. **Install dependencies**
-   ```bash
-   npm install
-   ```
+That's it. You can start editing right away.
 
-2. **Start development server**
-   ```bash
-   npm run dev
-   ```
+## Getting Started (Local Development)
 
-   This command:
-   - Starts the Convex backend at `http://127.0.0.1:3210`
-   - Starts the Next.js frontend at `http://localhost:3000`
-   - The preview will automatically connect to `http://localhost:3000`
+If you're developing locally on your machine:
 
-   > **Note:** The frontend needs access to the Convex backend. Make sure both are running!
-
-### Environment Setup
-
-The project uses a local `.env.local` file that's automatically created by Convex during startup. It contains:
-- `NEXT_PUBLIC_CONVEX_URL` - Connection URL for the Convex backend (needed by frontend)
-- `CONVEX_DEPLOYMENT` - Your local deployment ID
-
-If you need to manually configure it, set `NEXT_PUBLIC_CONVEX_URL` to the Convex backend URL.
-
-## Available Scripts
-
-- `npm run dev` - Run both frontend and backend in parallel (recommended)
-- `npm run dev:frontend` - Run Next.js frontend only
-- `npm run dev:backend` - Run Convex backend only
-- `npm run build` - Build the Next.js application
-- `npm run start` - Start the production server
-- `npm run lint` - Run ESLint
-
-## Project Structure
-
+```bash
+npm install
+npm run dev
 ```
-.
-├── app/                    # Next.js app directory
-│   ├── page.tsx           # Home page
-│   ├── layout.tsx         # Root layout
-│   └── globals.css        # Global styles
-├── convex/                # Convex backend
-│   ├── schema.ts          # Database schema
-│   ├── myFunctions.ts     # Backend functions
-│   └── _generated/        # Auto-generated (do not edit)
-├── components/            # React components
-└── public/                # Static assets
-```
+
+Then open `http://localhost:3000` in your browser.
 
 ## Making Changes
 
-### Backend Changes
-Edit files in the `convex/` directory:
-- `convex/myFunctions.ts` - Add/modify backend functions
-- `convex/schema.ts` - Define your database schema
+### Edit the Frontend (UI/Design)
+- Files are in the `app/` folder
+- Edit `app/page.tsx` to change what users see
+- Changes appear instantly in your preview
 
-Changes are automatically picked up by the Convex dev server.
+### Edit the Backend (Data/Functions)
+- Files are in the `convex/` folder
+- Edit `convex/myFunctions.ts` to add/change backend logic
+- Edit `convex/schema.ts` to change your database structure
+- Changes appear instantly
 
-### Frontend Changes
-Edit files in the `app/` directory:
-- `app/page.tsx` - Modify the home page
-- Create new files in `app/` to add routes
+## File Guide
 
-Changes are automatically hot-reloaded by Next.js.
+```
+app/                    ← Frontend (what users see)
+├── page.tsx           ← Main page
+├── layout.tsx         ← Page wrapper
+└── globals.css        ← Styling
+
+convex/                 ← Backend (data & logic)
+├── myFunctions.ts     ← Backend functions
+└── schema.ts          ← Database structure
+
+components/             ← Reusable UI components
+```
+
+## What's Running?
+
+When you start the project:
+
+- **Frontend**: Next.js at `http://localhost:3000`
+- **Backend**: Convex at `http://127.0.0.1:3210`
+- **Your View**: Shows the frontend interface
+
+Both communicate automatically. You don't need to worry about the backend URL—it's already configured.
 
 ## Troubleshooting
 
-### "I see nothing" / Blank page
-- Make sure **both** backend and frontend are running: `npm run dev`
-- Check that `NEXT_PUBLIC_CONVEX_URL` is set in `.env.local`
-- Try refreshing the page in your browser
+### Blank page or "Loading..." won't go away
+- Wait a few seconds for everything to start
+- Refresh the page
+- Check that you're viewing `http://localhost:3000`, not another port
 
-### Backend connection errors
-- Verify the Convex backend is running (check terminal for "Convex functions ready!")
-- Confirm `NEXT_PUBLIC_CONVEX_URL` matches the Convex backend URL
-- Clear browser cache and restart both servers
+### Changes aren't showing up
+- Make sure you saved the file
+- Wait a second or two for the preview to refresh
+- Try refreshing manually in the preview
 
-### Port already in use
-If port 3000 or 3210 is already in use:
-- Kill existing processes using those ports
-- Or modify the scripts in `package.json` to use different ports
+### Error about connection
+- The frontend can't reach the backend
+- This usually fixes itself—wait 10 seconds and refresh
+- If it persists, contact support
 
-## Resources
+## Learn More
 
-- [Convex Documentation](https://docs.convex.dev)
-- [Next.js Documentation](https://nextjs.org/docs)
-- [Convex + Next.js Guide](https://docs.convex.dev/home)
+- **[Convex Docs](https://docs.convex.dev)** - Backend database and functions
+- **[Next.js Docs](https://nextjs.org/docs)** - Frontend framework
+- **[Convex + Next.js Guide](https://docs.convex.dev/home)** - Integration guide
+
+## Next Steps
+
+1. **Try it out**: Click "+ Generate random number" to add data
+2. **Edit the UI**: Change text in `app/page.tsx`
+3. **Add more features**: Modify `convex/myFunctions.ts` and `app/page.tsx`
+
+Happy building! 🚀
