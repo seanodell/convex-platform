@@ -113,9 +113,11 @@ function Content() {
             Newest Numbers
           </p>
           <p className="text-slate-700 dark:text-slate-300 font-mono text-lg">
-            {numbers?.length === 0
-              ? "Click the button to generate a number!"
-              : (numbers?.join(", ") ?? "...")}
+            {numbers === undefined
+              ? "Backend not connected (frontend only mode)"
+              : numbers?.length === 0
+                ? "Click the button to generate a number!"
+                : numbers?.join(", ")}
           </p>
         </div>
       </div>
