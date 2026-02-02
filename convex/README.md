@@ -1,5 +1,13 @@
 # Welcome to your Convex functions directory!
 
+## Scope and Purpose
+
+This directory contains Convex backend functions (queries, mutations, and actions) that handle server-side logic, database operations, and real-time data subscriptions. This document provides guidance on writing Convex functions and using them in React components.
+
+## High-Level Summary
+
+Convex functions are organized in this directory and can be queries (read operations), mutations (write operations), or actions (long-running operations or external integrations). Functions are automatically type-safe based on the schema definition and can be called from the frontend using Convex React hooks.
+
 Write your Convex functions here.
 See https://docs.convex.dev/functions for more.
 

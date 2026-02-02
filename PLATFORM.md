@@ -1,6 +1,12 @@
 # Platform Overview
 
-This document describes the main technologies and development approach used in this project.
+## Scope and Purpose
+
+This document describes the main technologies, development tools, and development approach used in this project. It serves as a reference for understanding the technology stack, development environment setup, and workflow patterns.
+
+## High-Level Summary
+
+This platform is built on **Next.js 16** with **React 19** and **Convex** as the backend. Development uses **Cursor** as the primary development environment. Environment management is handled by **mise**, which manages Node.js and Python versions and provides task automation. The platform uses **TypeScript** throughout with **Tailwind CSS v4** for styling.
 
 ## Frontend
 
@@ -48,19 +54,38 @@ All functions are automatically type-safe based on the schema definition.
 
 Engineers use **Cursor** as the primary development environment. Cursor provides AI-powered code assistance and editing capabilities for building and maintaining the application.
 
-### Builder Fusion
-
-Designers use **Builder Fusion** for creating and iterating on UI designs. The design system and components are developed collaboratively between engineers using Cursor and designers using Builder Fusion.
-
 ### mise
 
 Development environment management is handled by **mise** (formerly rtx), which manages Node.js and Python versions and provides task automation for common development operations.
 
+The `mise.toml` file defines:
+
+- Node.js and Python versions
+- Environment variable loading from `.env.local`
+- Setup task for installing dependencies and pre-commit hooks
+- Pre-commit task for running code quality checks
+
+Common development commands are executed via npm scripts in `package.json` rather than mise tasks, providing a consistent interface across different development environments.
+
 ## Development Workflow
 
-The development process combines:
+### Development Commands
 
-- **Cursor** for engineers to implement features, write code, and manage the technical implementation
-- **Builder Fusion** for designers to create UI designs and iterate on the user experience
+Development commands are executed via npm scripts defined in `package.json`:
 
-This collaborative approach ensures that both the technical architecture and user experience are developed in parallel, with seamless integration between design and implementation.
+- `npm run dev` - Starts both frontend (Next.js) and backend (Convex) in parallel
+- `npm run dev:local` - Configures Convex for local development deployment and starts dev servers
+- `npm run dev:cloud` - Configures Convex for cloud development deployment and starts dev servers
+- `npm run dev:frontend` - Starts only the Next.js development server
+- `npm run dev:backend` - Starts only the Convex development server
+- `npm run build` - Builds the application for production
+- `npm run start` - Starts the production server
+- `npm run lint` - Runs ESLint for code quality checks
+
+### Development Process
+
+The development process uses **Cursor** for implementing features, writing code, and managing the technical implementation. The platform is built with a focus on type safety, real-time capabilities, and modern web development practices.
+
+### Code Quality
+
+Pre-commit hooks are managed via mise and run automatically before commits. The `mise run pre-commit` task can be used to run all pre-commit hooks manually on all files.

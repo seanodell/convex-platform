@@ -32,6 +32,14 @@ To learn more about developing your project with Convex, check out:
 - The rest of [Convex docs](https://docs.convex.dev/) to learn about all Convex features.
 - [Stack](https://stack.convex.dev/) for in-depth articles on advanced topics.
 
+## Documentation
+
+This project includes the following documentation files:
+
+- **[PLATFORM.md](PLATFORM.md)** - Describes the main technologies, development tools, and development approach used in this project. Serves as a reference for understanding the technology stack, development environment setup, and workflow patterns.
+
+- **[convex/README.md](convex/README.md)** - Provides guidance on writing Convex functions, including examples of query and mutation functions and how to use them in React components.
+
 ## Join the community
 
 Join thousands of developers building full-stack apps with Convex:
