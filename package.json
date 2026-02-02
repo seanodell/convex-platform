@@ -4,9 +4,10 @@
   "private": true,
   "scripts": {
     "dev": "npm-run-all --parallel dev:frontend dev:backend",
+    "dev:local": "npx convex dev --configure --dev-deployment local --once && npm run dev",
+    "dev:cloud": "npx convex dev --configure --dev-deployment cloud --once && npm run dev",
     "dev:frontend": "next dev",
     "dev:backend": "convex dev",
-    "predev": "convex dev --until-success && convex dashboard",
     "build": "next build",
     "start": "next start",
     "lint": "eslint . --ignore-pattern \"convex/_generated/**\""
