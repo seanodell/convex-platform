@@ -15,34 +15,6 @@ npm install
 pre-commit install
 """
 
-[tasks.dev]
-description = "Start Next.js development server"
-run = "npm run dev"
-
-[tasks.convex]
-description = "Start Convex development mode"
-run = "npx convex dev"
-
-[tasks.build]
-description = "Build for production"
-run = "npm run build"
-
-[tasks.start]
-description = "Start production server"
-run = "npm start"
-
-[tasks.lint]
-description = "Run ESLint"
-run = "npm run lint"
-
-[tasks.format]
-description = "Format code with Prettier"
-run = "npx prettier --write ."
-
-[tasks.format-check]
-description = "Check code formatting"
-run = "npx prettier --check ."
-
 [tasks.pre-commit]
 description = "Run pre-commit hooks on all files"
-run = "npx prettier --write . && ruff format . && ruff check --fix . && ruff check --select I --fix ."
+run = "pre-commit run --all"
