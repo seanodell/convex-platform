@@ -1,3 +1,7 @@
+---
+description: Commit staged git changes following the [Conventional Commits](https://www.conventionalcommits.org/) specification.
+---
+
 # Conventional Commit Command
 
 Commit staged git changes following the [Conventional Commits](https://www.conventionalcommits.org/) specification.

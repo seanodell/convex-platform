@@ -1,3 +1,7 @@
+---
+description: Update markdown documentation files based on git changes between main and HEAD, maintaining proper scope and structure for each document.
+---
+
 # Documentation Update Command
 
 Update markdown documentation files based on git changes between main and HEAD, maintaining proper scope and structure for each document.
