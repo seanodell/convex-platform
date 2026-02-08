@@ -35,3 +35,72 @@ run = "npm run test:e2e:debug"
 [tasks."test:report"]
 description = "View test report"
 run = "npm run test:e2e:report"
+
+[tasks.push_main]
+description = "Merge current branch to main and push to remote"
+run = """
+#!/bin/bash
+set -e
+
+# Get current branch name
+CURRENT_BRANCH=$(git branch --show-current)
+
+# Check if we're on main
+if [ "$CURRENT_BRANCH" = "main" ]; then
+    echo "❌ Error: You are already on the main branch"
+    echo "   Switch to a feature branch before running this task"
+    exit 1
+fi
+
+echo "📍 Current branch: $CURRENT_BRANCH"
+echo ""
+
+# Fetch latest changes from remote
+echo "🔄 Fetching latest changes from remote..."
+git fetch origin main
+
+# Check if main can be fast-forwarded
+echo "🔍 Checking if main can be fast-forwarded..."
+git checkout main
+git merge --ff-only origin/main || {
+    echo "❌ Error: Local main is not up to date with remote"
+    echo "   Please pull the latest changes first"
+    git checkout "$CURRENT_BRANCH"
+    exit 1
+    }
+
+# Show commits that will be added to main
+echo ""
+echo "📝 New commits that will be added to main:"
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+git --no-pager log --oneline --graph main.."$CURRENT_BRANCH"
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo ""
+
+# Prompt for confirmation
+read -p "Push these commits to main? (y/N): " -n 1 -r
+echo ""
+
+if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+    echo "❌ Push cancelled"
+    git checkout "$CURRENT_BRANCH"
+    exit 0
+fi
+
+# Merge current branch into main (fast-forward)
+echo ""
+echo "🔀 Merging $CURRENT_BRANCH into main..."
+git merge --ff-only "$CURRENT_BRANCH"
+
+# Push to remote
+echo "🚀 Pushing main to remote..."
+git push origin main
+
+# Return to original branch
+echo "✓ Successfully pushed to main"
+echo "📍 Returning to $CURRENT_BRANCH..."
+git checkout "$CURRENT_BRANCH"
+
+echo ""
+echo "✅ Done! Main has been updated and pushed to remote."
+"""
