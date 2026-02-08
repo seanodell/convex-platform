@@ -244,10 +244,12 @@ test.describe("Server Page", () => {
   });
 
   test.describe("Responsive Design", () => {
-    test("displays correctly on mobile viewport", async ({
-      page,
-      convexReady,
-    }) => {
+    test("mobile small - visual snapshot", async ({ page }) => {
+      await page.setViewportSize({ width: 375, height: 667 }); // iPhone SE
+      await expect(page).toHaveScreenshot("server-mobile-small.png");
+    });
+
+    test("mobile small - displays correctly", async ({ page, convexReady }) => {
       await page.setViewportSize({ width: 375, height: 667 }); // iPhone SE
 
       await expect(
@@ -260,12 +262,52 @@ test.describe("Server Page", () => {
       // Code blocks should still be visible and not overflow
       const codeBlock = page.locator("code > pre").first();
       await expect(codeBlock).toBeVisible();
+
+      // Check reactive data section
+      await expect(
+        page.getByRole("heading", { name: "Reactive client-loaded data" }),
+      ).toBeVisible();
+      await expect(
+        page.getByRole("button", { name: "Add a random number" }),
+      ).toBeVisible();
     });
 
-    test("displays correctly on tablet viewport", async ({
-      page,
-      convexReady,
-    }) => {
+    test("mobile small - interactions work", async ({ page, convexReady }) => {
+      await page.setViewportSize({ width: 375, height: 667 }); // iPhone SE
+
+      // Test button click on mobile
+      await page.getByRole("button", { name: "Add a random number" }).click();
+
+      // Should see updated numbers
+      const reactiveSection = page.locator("code > pre").last();
+      await expect(reactiveSection).toBeVisible();
+    });
+
+    test("mobile large - visual snapshot", async ({ page }) => {
+      await page.setViewportSize({ width: 414, height: 896 }); // iPhone 14 Pro Max
+      await expect(page).toHaveScreenshot("server-mobile-large.png");
+    });
+
+    test("mobile large - displays correctly", async ({ page, convexReady }) => {
+      await page.setViewportSize({ width: 414, height: 896 }); // iPhone 14 Pro Max
+
+      await expect(
+        page.getByRole("heading", { name: "Convex + Next.js" }),
+      ).toBeVisible();
+      await expect(
+        page.getByRole("heading", { name: "Non-reactive server-loaded data" }),
+      ).toBeVisible();
+      await expect(
+        page.getByRole("heading", { name: "Reactive client-loaded data" }),
+      ).toBeVisible();
+    });
+
+    test("tablet - visual snapshot", async ({ page }) => {
+      await page.setViewportSize({ width: 768, height: 1024 }); // iPad
+      await expect(page).toHaveScreenshot("server-tablet.png");
+    });
+
+    test("tablet - displays correctly", async ({ page, convexReady }) => {
       await page.setViewportSize({ width: 768, height: 1024 }); // iPad
 
       await expect(
@@ -273,6 +315,47 @@ test.describe("Server Page", () => {
       ).toBeVisible();
       await expect(
         page.getByRole("heading", { name: "Non-reactive server-loaded data" }),
+      ).toBeVisible();
+
+      // Both code blocks should be visible
+      const codeBlocks = page.locator("code > pre");
+      await expect(codeBlocks.first()).toBeVisible();
+      await expect(codeBlocks.last()).toBeVisible();
+    });
+
+    test("tablet - interactions work", async ({ page, convexReady }) => {
+      await page.setViewportSize({ width: 768, height: 1024 }); // iPad
+
+      // Test interactions on tablet viewport
+      const beforeText = await page.locator("code > pre").last().textContent();
+      await page.getByRole("button", { name: "Add a random number" }).click();
+
+      // Verify data changed
+      await expect(async () => {
+        const afterText = await page.locator("code > pre").last().textContent();
+        expect(afterText).not.toBe(beforeText);
+      }).toPass({ timeout: 2000 });
+    });
+
+    test("tablet landscape - visual snapshot", async ({ page }) => {
+      await page.setViewportSize({ width: 1024, height: 768 }); // iPad landscape
+      await expect(page).toHaveScreenshot("server-tablet-landscape.png");
+    });
+
+    test("tablet landscape - displays correctly", async ({
+      page,
+      convexReady,
+    }) => {
+      await page.setViewportSize({ width: 1024, height: 768 }); // iPad landscape
+
+      await expect(
+        page.getByRole("heading", { name: "Convex + Next.js" }),
+      ).toBeVisible();
+      await expect(
+        page.getByRole("heading", { name: "Non-reactive server-loaded data" }),
+      ).toBeVisible();
+      await expect(
+        page.getByRole("heading", { name: "Reactive client-loaded data" }),
       ).toBeVisible();
     });
   });

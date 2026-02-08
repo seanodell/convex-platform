@@ -351,27 +351,57 @@ test.describe("Home Page", () => {
   });
 
   test.describe("Responsive Design", () => {
-    test("displays correctly on mobile viewport", async ({
-      page,
-      convexReady,
-    }) => {
+    test("mobile small - visual snapshot", async ({ page, convexReady }) => {
       await page.setViewportSize({ width: 375, height: 667 }); // iPhone SE
-      // convexReady fixture already waited for loading to complete
+      await expect(page).toHaveScreenshot("home-mobile-small.png");
+    });
 
+    test("mobile small - displays correctly", async ({ page, convexReady }) => {
+      await page.setViewportSize({ width: 375, height: 667 }); // iPhone SE
+
+      // Check header elements
       await expect(
         page.getByRole("heading", { name: "Convex + Next.js" }),
       ).toBeVisible();
+      await expect(page.getByAltText("Convex Logo")).toBeVisible();
+      await expect(
+        page.getByRole("button", { name: "Want Auth?" }),
+      ).toBeVisible();
+
+      // Check main content
       await expect(
         page.getByRole("heading", { name: "Welcome!" }),
+      ).toBeVisible();
+      await expect(
+        page.getByRole("heading", { name: "Number generator" }),
+      ).toBeVisible();
+      await expect(
+        page.getByRole("button", { name: "+ Generate random number" }),
       ).toBeVisible();
     });
 
-    test("displays correctly on tablet viewport", async ({
-      page,
-      convexReady,
-    }) => {
-      await page.setViewportSize({ width: 768, height: 1024 }); // iPad
-      // convexReady fixture already waited for loading to complete
+    test("mobile small - interactions work", async ({ page, convexReady }) => {
+      await page.setViewportSize({ width: 375, height: 667 }); // iPhone SE
+
+      // Test number generator button
+      const generateButton = page.getByRole("button", {
+        name: "+ Generate random number",
+      });
+      await generateButton.click();
+      await expect(page.getByText("Newest Numbers")).toBeVisible();
+
+      // Test auth popover
+      await page.getByRole("button", { name: "Want Auth?" }).click();
+      await expect(page.getByText("WorkOS AuthKit")).toBeVisible();
+    });
+
+    test("mobile large - visual snapshot", async ({ page, convexReady }) => {
+      await page.setViewportSize({ width: 414, height: 896 }); // iPhone 14 Pro Max
+      await expect(page).toHaveScreenshot("home-mobile-large.png");
+    });
+
+    test("mobile large - displays correctly", async ({ page, convexReady }) => {
+      await page.setViewportSize({ width: 414, height: 896 }); // iPhone 14 Pro Max
 
       await expect(
         page.getByRole("heading", { name: "Convex + Next.js" }),
@@ -379,6 +409,83 @@ test.describe("Home Page", () => {
       await expect(
         page.getByRole("heading", { name: "Welcome!" }),
       ).toBeVisible();
+      await expect(
+        page.getByRole("heading", { name: "Useful resources" }),
+      ).toBeVisible();
+    });
+
+    test("tablet - visual snapshot", async ({ page, convexReady }) => {
+      await page.setViewportSize({ width: 768, height: 1024 }); // iPad
+      await expect(page).toHaveScreenshot("home-tablet.png");
+    });
+
+    test("tablet - displays correctly", async ({ page, convexReady }) => {
+      await page.setViewportSize({ width: 768, height: 1024 }); // iPad
+
+      // Check all major sections are visible
+      await expect(
+        page.getByRole("heading", { name: "Convex + Next.js" }),
+      ).toBeVisible();
+      await expect(
+        page.getByRole("heading", { name: "Welcome!" }),
+      ).toBeVisible();
+      await expect(
+        page.getByRole("heading", { name: "Number generator" }),
+      ).toBeVisible();
+      await expect(
+        page.getByRole("heading", { name: "Making changes" }),
+      ).toBeVisible();
+      await expect(
+        page.getByRole("heading", { name: "Useful resources" }),
+      ).toBeVisible();
+
+      // Check resource cards are in grid layout
+      await expect(page.getByText("Convex docs").first()).toBeVisible();
+      await expect(page.getByText("Templates").first()).toBeVisible();
+      await expect(page.getByText("Stack articles").first()).toBeVisible();
+      await expect(page.getByText("Discord").first()).toBeVisible();
+    });
+
+    test("tablet - interactions work", async ({ page, convexReady }) => {
+      await page.setViewportSize({ width: 768, height: 1024 }); // iPad
+
+      // Test clicking and navigation works on tablet
+      await page
+        .getByRole("button", { name: "+ Generate random number" })
+        .click();
+      await expect(page.getByText("Newest Numbers")).toBeVisible();
+
+      // Test auth popover on tablet
+      await page.getByRole("button", { name: "Want Auth?" }).click();
+      await expect(page.getByText("WorkOS AuthKit")).toBeVisible();
+      await expect(page.getByText("Clerk")).toBeVisible();
+      await expect(page.getByText("Convex Auth")).toBeVisible();
+    });
+
+    test("tablet landscape - visual snapshot", async ({
+      page,
+      convexReady,
+    }) => {
+      await page.setViewportSize({ width: 1024, height: 768 }); // iPad landscape
+      await expect(page).toHaveScreenshot("home-tablet-landscape.png");
+    });
+
+    test("tablet landscape - displays correctly", async ({
+      page,
+      convexReady,
+    }) => {
+      await page.setViewportSize({ width: 1024, height: 768 }); // iPad landscape
+
+      await expect(
+        page.getByRole("heading", { name: "Convex + Next.js" }),
+      ).toBeVisible();
+      await expect(
+        page.getByRole("heading", { name: "Welcome!" }),
+      ).toBeVisible();
+
+      // In landscape, resource cards should be visible in wider layout
+      const resourceCards = page.locator('a[href*="docs.convex.dev"]');
+      await expect(resourceCards.first()).toBeVisible();
     });
   });
 });
