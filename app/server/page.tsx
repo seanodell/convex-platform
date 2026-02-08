@@ -14,26 +14,32 @@ export default async function ServerPage() {
   return (
     <MainContent>
       <div className="p-8 flex flex-col gap-6 mx-auto max-w-2xl">
-        <div className="flex items-center justify-center gap-4">
-          <div className="flex items-center gap-4">
-            <Image src="/convex.svg" alt="Convex Logo" width={48} height={48} />
-            <div className="w-px h-12 bg-slate-300 dark:bg-slate-600"></div>
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+          <div className="flex items-center gap-3">
+            <Image
+              src="/convex.svg"
+              alt="Convex Logo"
+              width={32}
+              height={32}
+              className="sm:w-12 sm:h-12"
+            />
+            <div className="w-px h-8 sm:h-12 bg-slate-300 dark:bg-slate-600"></div>
             <Image
               src="/nextjs-icon-light-background.svg"
               alt="Next.js Logo"
-              width={48}
-              height={48}
-              className="dark:hidden"
+              width={32}
+              height={32}
+              className="dark:hidden sm:w-12 sm:h-12"
             />
             <Image
               src="/nextjs-icon-dark-background.svg"
               alt="Next.js Logo"
-              width={48}
-              height={48}
-              className="hidden dark:block"
+              width={32}
+              height={32}
+              className="hidden dark:block sm:w-12 sm:h-12"
             />
           </div>
-          <h1 className="text-4xl font-bold text-slate-800 dark:text-slate-200">
+          <h1 className="text-2xl sm:text-4xl font-bold text-slate-800 dark:text-slate-200 text-center sm:text-left">
             Convex + Next.js
           </h1>
         </div>
