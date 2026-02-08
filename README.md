@@ -142,6 +142,8 @@ This project includes the following documentation files:
 
 - **[docs/testing.md](docs/testing.md)** - Comprehensive guide to end-to-end testing with Playwright. Covers visual regression testing, functional testing, accessibility testing, database snapshots for data consistency, test architecture, debugging strategies, CI/CD integration, and best practices.
 
+- **[docs/accessibility.md](docs/accessibility.md)** - Documents accessibility features and implementation. Includes skip navigation, keyboard accessibility, color contrast standards, and guidelines for maintaining WCAG 2.1 Level AA compliance in new features.
+
 ## Learn More
 
 - [Convex Documentation](https://docs.convex.dev/) - Complete Convex API reference and guides

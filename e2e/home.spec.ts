@@ -76,7 +76,8 @@ test.describe("Home Page", () => {
         page.getByRole("heading", { name: "Convex + Next.js" }),
       ).toBeVisible();
       await expect(page.getByAltText("Convex Logo")).toBeVisible();
-      await expect(page.getByAltText("Next.js Logo")).toBeVisible();
+      // Use .first() since there are two Next.js logos (light/dark mode)
+      await expect(page.getByAltText("Next.js Logo").first()).toBeVisible();
     });
 
     test("displays main content sections", async ({ page, convexReady }) => {
@@ -102,10 +103,11 @@ test.describe("Home Page", () => {
     }) => {
       // convexReady fixture already waited for loading to complete
 
-      await expect(page.getByText("Convex docs")).toBeVisible();
-      await expect(page.getByText("Stack articles")).toBeVisible();
-      await expect(page.getByText("Templates")).toBeVisible();
-      await expect(page.getByText("Discord")).toBeVisible();
+      await expect(page.getByText("Convex docs").first()).toBeVisible();
+      await expect(page.getByText("Stack articles").first()).toBeVisible();
+      // Use .first() since text appears in both heading and description
+      await expect(page.getByText("Templates").first()).toBeVisible();
+      await expect(page.getByText("Discord").first()).toBeVisible();
     });
   });
 
@@ -327,7 +329,12 @@ test.describe("Home Page", () => {
     test("can navigate with keyboard", async ({ page, convexReady }) => {
       // convexReady fixture already waited for loading to complete
 
-      // Tab to auth button
+      // First Tab focuses skip link (accessibility feature)
+      await page.keyboard.press("Tab");
+      const skipLink = page.getByRole("link", { name: "Skip to main content" });
+      await expect(skipLink).toBeFocused();
+
+      // Second Tab focuses auth button
       await page.keyboard.press("Tab");
       const authButton = page.getByRole("button", { name: "Want Auth?" });
       await expect(authButton).toBeFocused();

@@ -5,6 +5,7 @@ import { api } from "../convex/_generated/api";
 import Link from "next/link";
 import Image from "next/image";
 import { useState, useEffect, useRef } from "react";
+import { MainContent } from "@/components/MainContent";
 
 export default function Home() {
   return (
@@ -35,9 +36,11 @@ export default function Home() {
         </div>
         <AuthPopoverButton />
       </header>
-      <main className="p-8 flex flex-col gap-8">
-        <Content />
-      </main>
+      <MainContent>
+        <div className="p-8 flex flex-col gap-8">
+          <Content />
+        </div>
+      </MainContent>
     </>
   );
 }
@@ -249,7 +252,7 @@ function AuthPopoverButton() {
     <div className="relative" ref={popoverRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="bg-green-600 hover:bg-green-700 dark:bg-green-600 dark:hover:bg-green-500 text-white text-sm font-medium px-4 py-2 rounded-lg cursor-pointer transition-all duration-200 shadow-sm hover:shadow-md"
+        className="bg-green-700 hover:bg-green-800 dark:bg-green-700 dark:hover:bg-green-600 text-white text-sm font-medium px-4 py-2 rounded-lg cursor-pointer transition-all duration-200 shadow-sm hover:shadow-md"
       >
         Want Auth?
       </button>

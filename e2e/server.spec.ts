@@ -56,7 +56,8 @@ test.describe("Server Page", () => {
         page.getByRole("heading", { name: "Convex + Next.js" }),
       ).toBeVisible();
       await expect(page.getByAltText("Convex Logo")).toBeVisible();
-      await expect(page.getByAltText("Next.js Logo")).toBeVisible();
+      // Use .first() since there are two Next.js logos (light/dark mode)
+      await expect(page.getByAltText("Next.js Logo").first()).toBeVisible();
     });
 
     test("displays section headings", async ({ page }) => {
@@ -209,7 +210,12 @@ test.describe("Server Page", () => {
     });
 
     test("can navigate with keyboard", async ({ page, convexReady }) => {
-      // Tab to the button
+      // First Tab focuses skip link (accessibility feature)
+      await page.keyboard.press("Tab");
+      const skipLink = page.getByRole("link", { name: "Skip to main content" });
+      await expect(skipLink).toBeFocused();
+
+      // Second Tab focuses the button
       await page.keyboard.press("Tab");
       const button = page.getByRole("button", { name: "Add a random number" });
       await expect(button).toBeFocused();

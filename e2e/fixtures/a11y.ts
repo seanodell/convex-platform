@@ -1,5 +1,5 @@
-import { Page } from "@playwright/test";
-import { injectAxe, checkA11y, configureAxe } from "@axe-core/playwright";
+import { Page, expect } from "@playwright/test";
+import AxeBuilder from "@axe-core/playwright";
 
 /**
  * Run accessibility checks on a page
@@ -13,27 +13,24 @@ export async function runAccessibilityTests(
     excludeRules?: string[];
   } = {},
 ) {
-  // Inject axe-core into the page
-  await injectAxe(page);
+  // Build axe configuration
+  let axeBuilder = new AxeBuilder({ page });
 
-  // Configure axe if needed
-  if (options.includeTags || options.excludeRules) {
-    await configureAxe(page, {
-      rules: options.excludeRules?.map((rule) => ({
-        id: rule,
-        enabled: false,
-      })),
-    });
+  // Add tags if specified
+  if (options.includeTags && options.includeTags.length > 0) {
+    axeBuilder = axeBuilder.withTags(options.includeTags);
+  }
+
+  // Disable specific rules if specified
+  if (options.excludeRules && options.excludeRules.length > 0) {
+    axeBuilder = axeBuilder.disableRules(options.excludeRules);
   }
 
   // Run accessibility checks
-  // This will throw an error if violations are found
-  await checkA11y(page, undefined, {
-    detailedReport: true,
-    detailedReportOptions: {
-      html: true,
-    },
-  });
+  const accessibilityScanResults = await axeBuilder.analyze();
+
+  // Assert no violations found
+  expect(accessibilityScanResults.violations).toEqual([]);
 }
 
 /**
