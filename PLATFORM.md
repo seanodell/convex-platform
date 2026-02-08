@@ -6,7 +6,7 @@ This document describes the main technologies, development tools, and developmen
 
 ## High-Level Summary
 
-This platform is built on **Next.js 16** with **React 19** and **Convex** as the backend. Development uses **Cursor** as the primary development environment. Environment management is handled by **mise**, which manages Node.js and Python versions and provides task automation. The platform uses **TypeScript** throughout with **Tailwind CSS v4** for styling.
+This platform is built on **Next.js 16** with **React 19** and **Convex** as the backend. Development uses **Cursor** as the primary development environment. Environment management is handled by **mise**, which manages Node.js and Python versions and provides task automation. The platform uses **TypeScript** throughout with **Tailwind CSS v4** for styling. Testing is handled by **Playwright** for end-to-end, visual regression, and accessibility testing.
 
 ## Frontend
 
@@ -67,20 +67,51 @@ The `mise.toml` file defines:
 
 Common development commands are executed via npm scripts in `package.json` rather than mise tasks, providing a consistent interface across different development environments.
 
+### Playwright
+
+End-to-end testing is handled by **Playwright**, which provides:
+
+- **Visual Regression Testing**: Captures and compares screenshots across browsers (Chromium, Firefox, WebKit) to detect unintended visual changes
+- **Functional Testing**: Verifies user interactions, form submissions, navigation, and application behavior
+- **Accessibility Testing**: Uses axe-core to check WCAG 2.1 AA compliance and keyboard navigation
+- **Database Snapshots**: Uses Convex's native export/import to ensure tests run with consistent data state
+- **CI/CD Integration**: Automated test runs on pull requests with artifact uploads and PR comments
+
+Tests run sequentially (workers: 1) to ensure predictable test order and database consistency for visual regression testing. The database state is automatically restored before tests using Convex export snapshots.
+
+See [docs/testing.md](docs/testing.md) for comprehensive testing documentation.
+
 ## Development Workflow
 
 ### Development Commands
 
 Development commands are executed via npm scripts defined in `package.json`:
 
+**Development:**
+
 - `npm run dev` - Starts both frontend (Next.js) and backend (Convex) in parallel
 - `npm run dev:local` - Configures Convex for local development deployment and starts dev servers
 - `npm run dev:cloud` - Configures Convex for cloud development deployment and starts dev servers
 - `npm run dev:frontend` - Starts only the Next.js development server
 - `npm run dev:backend` - Starts only the Convex development server
+
+**Build & Deploy:**
+
 - `npm run build` - Builds the application for production
 - `npm run start` - Starts the production server
+
+**Code Quality:**
+
 - `npm run lint` - Runs ESLint for code quality checks
+
+**Testing:**
+
+- `npm run test:e2e` - Runs all Playwright E2E tests
+- `npm run test:e2e:ui` - Opens Playwright UI for interactive test development
+- `npm run test:e2e:headed` - Runs tests in headed mode (visible browser)
+- `npm run test:e2e:debug` - Runs tests in debug mode
+- `npm run test:e2e:report` - Opens the test results report
+- `npm run test:e2e:update-snapshots` - Updates visual and database snapshots
 
 ### Development Process
 

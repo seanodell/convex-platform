@@ -140,6 +140,8 @@ This project includes the following documentation files:
 
 - **[convex/README.md](convex/README.md)** - Contains Convex backend functions (queries, mutations, and actions) that handle server-side logic, database operations, and real-time data subscriptions. Provides guidance on writing Convex functions and using them in React components.
 
+- **[docs/testing.md](docs/testing.md)** - Comprehensive guide to end-to-end testing with Playwright. Covers visual regression testing, functional testing, accessibility testing, database snapshots for data consistency, test architecture, debugging strategies, CI/CD integration, and best practices.
+
 ## Learn More
 
 - [Convex Documentation](https://docs.convex.dev/) - Complete Convex API reference and guides
