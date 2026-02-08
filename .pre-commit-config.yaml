@@ -25,3 +25,10 @@ repos:
         language: system
         types: [file]
         files: \.py$
+      - id: test-coverage-check
+        name: E2E Test Coverage Check
+        entry: node scripts/check-test-coverage.js
+        language: system
+        types: [file]
+        files: ^app/.*page\.tsx$
+        pass_filenames: true

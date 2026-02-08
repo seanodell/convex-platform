@@ -49,6 +49,36 @@ export const addNumber = mutation({
   },
 });
 
+// Test utility: Clear all numbers from database
+export const clearNumbers = mutation({
+  args: {},
+  handler: async (ctx) => {
+    const numbers = await ctx.db.query("numbers").collect();
+    for (const number of numbers) {
+      await ctx.db.delete(number._id);
+    }
+    console.log(`Cleared ${numbers.length} numbers from database`);
+  },
+});
+
+// Test utility: Seed predictable test data
+export const seedTestData = mutation({
+  args: {},
+  handler: async (ctx) => {
+    // Clear existing data first
+    const existing = await ctx.db.query("numbers").collect();
+    for (const number of existing) {
+      await ctx.db.delete(number._id);
+    }
+
+    // Seed predictable data for tests
+    await ctx.db.insert("numbers", { value: 42 });
+    await ctx.db.insert("numbers", { value: 7 });
+    await ctx.db.insert("numbers", { value: 99 });
+    console.log("Seeded test data: [42, 7, 99]");
+  },
+});
+
 // You can fetch data from and send data to third-party APIs via an action:
 export const myAction = action({
   // Validators for arguments.

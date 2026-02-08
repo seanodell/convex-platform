@@ -1,5 +1,7 @@
 # Convex Platform
 
+[![Playwright Tests](https://github.com/seanodell/ConvexPlatform/actions/workflows/playwright.yml/badge.svg)](https://github.com/seanodell/ConvexPlatform/actions/workflows/playwright.yml)
+
 ## Scope and Purpose
 
 This is the main project README that provides an overview of the Convex Platform project, quick start instructions, project structure, and links to detailed documentation. It serves as the entry point for developers getting started with the project.
@@ -74,6 +76,61 @@ This project uses **Cursor** as the primary development environment and **mise**
 - Pre-commit hooks run automatically before commits
 - ESLint is configured for TypeScript and React
 - Run `npm run lint` to check code quality manually
+
+### Testing
+
+This project uses **Playwright** for end-to-end testing with visual regression, functional, and accessibility testing.
+
+#### Run Tests
+
+```bash
+# Run all E2E tests
+npm run test:e2e
+
+# Run tests with UI (interactive mode)
+npm run test:e2e:ui
+
+# Run tests in headed mode (watch browser)
+npm run test:e2e:headed
+
+# View test report
+npm run test:e2e:report
+
+# Update visual snapshots (after intentional UI changes)
+npm run test:e2e:update-snapshots
+```
+
+#### Automatic Test Generation
+
+Use the `/test` command in Claude Code to automatically generate and update tests:
+
+```bash
+/test
+```
+
+The command will:
+
+- Scan all pages in the `app/` directory
+- Generate tests for pages without tests
+- Update tests for modified pages
+- Report orphaned tests for deleted pages
+
+**Convention:** Each page automatically maps to a test file:
+
+- `app/page.tsx` → `e2e/home.spec.ts`
+- `app/about/page.tsx` → `e2e/about.spec.ts`
+
+#### Pre-commit Hook
+
+A pre-commit hook checks if modified pages have corresponding tests and warns (but doesn't block) if tests are missing. Run `/test` to sync tests with your changes.
+
+#### CI/CD
+
+Tests run automatically on all pull requests and pushes to `main`. View results in the GitHub Actions tab.
+
+#### Learn More
+
+See [docs/testing.md](docs/testing.md) for comprehensive testing documentation.
 
 ## Documentation
 

@@ -10,7 +10,13 @@
     "dev:backend": "convex dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint . --ignore-pattern \"convex/_generated/**\""
+    "lint": "eslint . --ignore-pattern \"convex/_generated/**\"",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e:debug": "playwright test --debug",
+    "test:e2e:headed": "playwright test --headed",
+    "test:e2e:report": "playwright show-report",
+    "test:e2e:update-snapshots": "node scripts/update-snapshots.js"
   },
   "dependencies": {
     "convex": "^1.31.7",
@@ -19,7 +25,9 @@
     "react-dom": "^19.2.4"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.10.2",
     "@convex-dev/eslint-plugin": "^1.1.1",
+    "@playwright/test": "^1.49.0",
     "@tailwindcss/postcss": "^4.1.18",
     "@types/node": "^24.10.9",
     "@types/react": "^19.2.10",

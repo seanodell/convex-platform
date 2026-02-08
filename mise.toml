@@ -12,9 +12,26 @@ description = "Set up development environment"
 run = """
 pip install -r requirements.txt
 npm install
+npx playwright install --with-deps
 pre-commit install
 """
 
 [tasks.pre-commit]
 description = "Run pre-commit hooks on all files"
 run = "pre-commit run --all"
+
+[tasks.test]
+description = "Run all E2E tests"
+run = "npm run test:e2e"
+
+[tasks."test:ui"]
+description = "Run tests in UI mode"
+run = "npm run test:e2e:ui"
+
+[tasks."test:debug"]
+description = "Debug tests"
+run = "npm run test:e2e:debug"
+
+[tasks."test:report"]
+description = "View test report"
+run = "npm run test:e2e:report"
