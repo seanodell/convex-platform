@@ -78,7 +78,7 @@ npx playwright test home
 # Run a specific test by name
 npx playwright test -g "displays header"
 
-# Run tests in a specific browser
+# Tests run in Chromium only (default configuration)
 npx playwright test --project=chromium
 ```
 
@@ -252,7 +252,7 @@ The hook **warns** but **does not block** commits.
 
 ### Capturing Screenshots
 
-Visual regression tests capture screenshots and compare them across runs:
+Visual regression tests capture screenshots and compare them across runs in Chromium:
 
 ```typescript
 test("matches visual snapshot", async ({ page }) => {
@@ -273,6 +273,32 @@ test("light mode snapshot", async ({ page }) => {
 test("dark mode snapshot", async ({ page }) => {
   await page.emulateMedia({ colorScheme: "dark" });
   await expect(page).toHaveScreenshot("page-dark.png");
+});
+```
+
+### Testing Responsive Layouts
+
+Test pages across multiple viewport sizes to ensure responsive design works correctly:
+
+```typescript
+test("mobile small - visual snapshot", async ({ page, convexReady }) => {
+  await page.setViewportSize({ width: 375, height: 667 }); // iPhone SE
+  await expect(page).toHaveScreenshot("page-mobile-small.png");
+});
+
+test("mobile large - visual snapshot", async ({ page, convexReady }) => {
+  await page.setViewportSize({ width: 414, height: 896 }); // iPhone 14 Pro Max
+  await expect(page).toHaveScreenshot("page-mobile-large.png");
+});
+
+test("tablet - visual snapshot", async ({ page, convexReady }) => {
+  await page.setViewportSize({ width: 768, height: 1024 }); // iPad portrait
+  await expect(page).toHaveScreenshot("page-tablet.png");
+});
+
+test("tablet landscape - visual snapshot", async ({ page, convexReady }) => {
+  await page.setViewportSize({ width: 1024, height: 768 }); // iPad landscape
+  await expect(page).toHaveScreenshot("page-tablet-landscape.png");
 });
 ```
 
@@ -307,7 +333,7 @@ The snapshot system uses **Convex's native export/import** - it automatically ca
 # 2. Update snapshots - captures BOTH database and visual state
 npm run test:e2e:update-snapshots
 
-# 3. Commit both the visual snapshots and data-snapshot.json
+# 3. Commit both the visual snapshots and data-snapshot.zip
 git add e2e/ -A
 git commit -m "test: update visual and data snapshots"
 
@@ -338,9 +364,13 @@ When visual tests fail:
 
 Every test run starts with **identical database state** by restoring from a snapshot:
 
-1. **Before tests start** - Setup project runs and restores database from `e2e/fixtures/data-snapshot.json`
+1. **Before tests start** - Setup project runs, waits for Convex backend to accept connections via HTTP health checks, then restores database from `e2e/fixtures/data-snapshot.zip`
 2. **Tests execute sequentially** - Tests run one at a time with a single worker to ensure data consistency
 3. **Visual snapshots match** - Screenshots are consistent because data is consistent
+
+**Backend Health Checks:**
+
+The test setup uses HTTP health checks (`waitForConvexBackend()`) instead of fixed delays to ensure the Convex backend is actually ready to accept connections before attempting database operations. This makes test startup more reliable and responsive.
 
 **Why sequential execution?**
 
@@ -399,7 +429,7 @@ await restoreDataSnapshot();
 
 If tests pass locally but fail in CI with visual differences, check:
 
-1. Is `e2e/fixtures/data-snapshot.json` committed to git?
+1. Is `e2e/fixtures/data-snapshot.zip` committed to git?
 2. Did you run `npm run test:e2e:update-snapshots` to capture both states together?
 3. Are tests modifying the database without cleanup?
 
@@ -407,7 +437,7 @@ If tests pass locally but fail in CI with visual differences, check:
 
 ### Running A11y Tests
 
-All pages are tested for WCAG 2.1 Level AA compliance:
+All pages are tested for WCAG 2.1 Level AA compliance using @axe-core/playwright:
 
 ```typescript
 import { runAccessibilityTests } from "./fixtures/a11y";
@@ -417,17 +447,37 @@ test("has no accessibility violations", async ({ page }) => {
 });
 ```
 
+The test suite automatically checks for accessibility violations including skip navigation, keyboard focus, color contrast, and semantic HTML. See [docs/accessibility.md](accessibility.md) for detailed information about the accessibility features implemented in this project.
+
 ### Common A11y Issues
 
 The tests check for:
 
-- Color contrast ratios
+- Color contrast ratios (WCAG AA: 4.5:1 for normal text)
 - ARIA labels and roles
 - Semantic HTML structure
-- Keyboard navigation
-- Focus management
+- Keyboard navigation (Tab, Shift+Tab, Enter, Escape)
+- Focus management and skip links
 - Alt text for images
 - Form label associations
+
+### Testing Keyboard Navigation
+
+Tests verify that keyboard users can navigate effectively:
+
+```typescript
+test("can navigate with keyboard", async ({ page, convexReady }) => {
+  // First Tab focuses skip link (accessibility feature)
+  await page.keyboard.press("Tab");
+  const skipLink = page.getByRole("link", { name: "Skip to main content" });
+  await expect(skipLink).toBeFocused();
+
+  // Second Tab focuses next interactive element
+  await page.keyboard.press("Tab");
+  const button = page.getByRole("button", { name: "Submit" });
+  await expect(button).toBeFocused();
+});
+```
 
 ### Excluding Specific Rules
 
@@ -515,7 +565,7 @@ Workflow location: `.github/workflows/playwright.yml`
 
 1. Install dependencies and Playwright browsers
 2. Start Convex dev backend
-3. Run full test suite across all browsers
+3. Run full test suite in Chromium (including visual regression, functional, accessibility, and responsive tests)
 4. Capture screenshots and videos on failure
 5. Upload test reports as artifacts
 6. Comment results on pull requests

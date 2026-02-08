@@ -71,15 +71,16 @@ Common development commands are executed via npm scripts in `package.json` rathe
 
 End-to-end testing is handled by **Playwright**, which provides:
 
-- **Visual Regression Testing**: Captures and compares screenshots across browsers (Chromium, Firefox, WebKit) to detect unintended visual changes
+- **Visual Regression Testing**: Captures and compares screenshots in Chromium to detect unintended visual changes across desktop, tablet, and mobile viewports
 - **Functional Testing**: Verifies user interactions, form submissions, navigation, and application behavior
-- **Accessibility Testing**: Uses axe-core to check WCAG 2.1 AA compliance and keyboard navigation
-- **Database Snapshots**: Uses Convex's native export/import to ensure tests run with consistent data state
+- **Accessibility Testing**: Uses @axe-core/playwright to check WCAG 2.1 AA compliance, including keyboard navigation and skip links
+- **Responsive Testing**: Tests layouts across multiple viewport sizes (mobile small/large, tablet portrait/landscape)
+- **Database Snapshots**: Uses Convex's native export/import with HTTP health checks to ensure tests run with consistent data state
 - **CI/CD Integration**: Automated test runs on pull requests with artifact uploads and PR comments
 
-Tests run sequentially (workers: 1) to ensure predictable test order and database consistency for visual regression testing. The database state is automatically restored before tests using Convex export snapshots.
+Tests run sequentially (workers: 1) with Chromium only to ensure predictable test order and database consistency for visual regression testing. The database state is automatically restored before tests using Convex export snapshots.
 
-See [docs/testing.md](docs/testing.md) for comprehensive testing documentation.
+See [docs/testing.md](docs/testing.md) for comprehensive testing documentation and [docs/accessibility.md](docs/accessibility.md) for accessibility implementation details.
 
 ## Development Workflow
 
