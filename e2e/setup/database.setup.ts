@@ -22,6 +22,27 @@ async function waitForConvex(maxAttempts = 20): Promise<string | null> {
 }
 
 /**
+ * Wait for Convex backend to actually accept connections
+ * Tests if the backend is listening by making an HTTP request
+ */
+async function waitForConvexBackend(maxAttempts = 15): Promise<boolean> {
+  const backendUrl = "http://127.0.0.1:3210";
+
+  for (let i = 0; i < maxAttempts; i++) {
+    try {
+      // Try to connect to the backend
+      const response = await fetch(backendUrl, { method: "HEAD" });
+      // Any response (even error) means the backend is listening
+      return true;
+    } catch {
+      // Backend not ready yet, try again
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+    }
+  }
+  return false;
+}
+
+/**
  * Database setup - runs AFTER webServer is ready
  * - In capture mode (CAPTURE_SNAPSHOT=true): Captures current database state
  * - In restore mode (default): Restores database from snapshot
@@ -41,10 +62,16 @@ setup("prepare database", async () => {
   // Set the URL in the environment so testData functions can use it
   process.env.CONVEX_URL = convexUrl;
 
-  // Wait a bit longer for the server to actually accept connections
+  // Wait for the server to actually accept connections
   console.log("⏳ Waiting for Convex server to accept connections...");
-  await new Promise((resolve) => setTimeout(resolve, 3000));
-  console.log("✓ Convex backend ready\n");
+  const backendReady = await waitForConvexBackend();
+  if (!backendReady) {
+    console.warn(
+      "⚠️  Convex backend not accepting connections - database operations may fail\n",
+    );
+  } else {
+    console.log("✓ Convex backend ready\n");
+  }
 
   if (captureMode) {
     console.log("📸 CAPTURE MODE: Saving current database state...");

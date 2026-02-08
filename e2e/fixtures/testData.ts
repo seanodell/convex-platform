@@ -1,5 +1,5 @@
 import { execSync } from "child_process";
-import { existsSync } from "fs";
+import { existsSync, unlinkSync } from "fs";
 
 const SNAPSHOT_PATH = "e2e/fixtures/data-snapshot.zip";
 
@@ -10,6 +10,12 @@ const SNAPSHOT_PATH = "e2e/fixtures/data-snapshot.zip";
  */
 export async function captureDataSnapshot() {
   try {
+    // Remove existing snapshot if it exists (export won't overwrite)
+    if (existsSync(SNAPSHOT_PATH)) {
+      unlinkSync(SNAPSHOT_PATH);
+      console.log(`[testData] Removed existing snapshot`);
+    }
+
     execSync(`npx convex export --path ${SNAPSHOT_PATH}`, {
       stdio: "inherit",
     });
