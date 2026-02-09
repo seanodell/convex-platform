@@ -27,12 +27,10 @@ jobs:
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
 
-      - name: Initialize Convex for CI
-        run: |
-          # Create .env.local without CONVEX_DEPLOYMENT to run in ephemeral mode
-          # This prevents Convex from prompting for authentication in CI
-          echo "NEXT_PUBLIC_CONVEX_URL=http://127.0.0.1:3210" > .env.local
-          echo "NEXT_PUBLIC_CONVEX_SITE_URL=http://127.0.0.1:3211" >> .env.local
+      - name: Configure Convex local backend
+        run: npx convex dev --configure --dev-deployment local --once
+        env:
+          CI: true
 
       - name: Run Playwright tests
         run: npm run test:e2e
