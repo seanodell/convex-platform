@@ -27,15 +27,11 @@ jobs:
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
 
-      - name: Configure Convex local backend
-        run: npx convex dev --configure --dev-deployment local --once
-        env:
-          CI: true
-
       - name: Run Playwright tests
         run: npm run test:e2e
         env:
           CI: true
+          CONVEX_AGENT_MODE: anonymous
 
       - name: Upload test results
         uses: actions/upload-artifact@v4
