@@ -27,6 +27,12 @@ jobs:
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
 
+      - name: Initialize Convex for local development
+        run: |
+          # Create .env.local with local deployment config to prevent prompting
+          echo "CONVEX_DEPLOYMENT=local" > .env.local
+          echo "NEXT_PUBLIC_CONVEX_URL=http://127.0.0.1:3210" >> .env.local
+
       - name: Run Playwright tests
         run: npm run test:e2e
         env:
