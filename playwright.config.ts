@@ -75,4 +75,8 @@ export default defineConfig({
       threshold: 0.2,
     },
   },
+
+  /* Use platform-agnostic snapshot paths for cross-platform compatibility */
+  snapshotPathTemplate:
+    "{testDir}/{testFileDir}/__screenshots__/{testFileName}/{arg}{ext}",
 });
