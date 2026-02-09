@@ -32,6 +32,8 @@ jobs:
         env:
           CI: true
           CONVEX_AGENT_MODE: anonymous
+          NEXT_PUBLIC_CONVEX_URL: http://127.0.0.1:3210
+          NEXT_PUBLIC_CONVEX_SITE_URL: http://127.0.0.1:3211
 
       - name: Upload test results
         uses: actions/upload-artifact@v4
